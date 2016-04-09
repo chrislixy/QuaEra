@@ -1,0 +1,13 @@
+# Add some related variables
+
+train$weekend=as.factor(ifelse(train$Day %in% 0:4, "Weekday", "Weekend"))
+train$timeofday=as.factor(ifelse(train$Time %in% 6:11, "Morning",
+                                 ifelse(train$Time %in% 12:18, "Afternoon",
+                                 ifelse(train$Time %in% 19:23 , "Evening", "Night"))))
+# by calculating the difference in oldest and youngest, and munually set agediff=0 for 1 customer,
+# avoid the problem of different age for only 1 person (problem for 2193 customers)
+train$agediff=train$AgeOldest-train$AgeYoungest
+train$agediff[train$AgeOldest != train$AgeYoungest & train$GroupSize==1]=0
+train$family=as.factor(ifelse(train$Married==1 & train$agediff>15 & train$GroupSize>=2, "Yes","No"))
+train$couple=as.factor(ifelse(train$Married==1 & train$agediff<=15 & train$GroupSize==2, "Yes","No"))
+train$individual=as.factor(ifelse(train$GroupSize==1, "Yes","No"))

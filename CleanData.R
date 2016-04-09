@@ -10,7 +10,7 @@ train$RecordType=as.factor(train$RecordType)
 # Time
 train$Day=as.ordered(train$Day)
 train$Time=unlist(lapply(strsplit(as.character(train$Time),":"), function(x){return(round(as.numeric(x[1])+as.numeric(x[2])/60))}))
-
+train$Time[train$Time==24]=0
 
 # possible: location that is visited more often has faster process because they are more experienced
 train$Location=as.factor(train$Location)
