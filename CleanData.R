@@ -20,10 +20,23 @@ train$Location=as.factor(train$Location)
 train$Homeowner=as.factor(train$Homeowner)
 
 # treat missing entries as NA, predict NA later with other demographic description
+
+# predict risk factor with existing data.
+# only 1570 out of 19963 filled risk factor in the end, may induce bias
+# only use RF at transaction to avoid weighting on #shopping points.
+summary(train$RiskFactor)
+length(unique(train$CustomerID[is.na(train$RiskFactor)]))
+a=train[!is.na(train$RiskFactor) & train$RecordType==1,]
+RFmodel=multinom(RiskFactor~State+GroupSize+Homeowner+CarAge+AgeOldest+Married,data=a)
+# predict with RFmodel
+train$RiskFactor[is.na(train$RiskFactor)]=predict(RFmodel,train[is.na(train$RiskFactor),])
+train$RiskFactor=as.ordered(train$RiskFactor)
+
 train$CarValue[train$CarValue==""]=NA
+CVmodel=multinom(CarValue~State+GroupSize+Homeowner+CarAge+AgeOldest+Married,data=train)
+train$CarValue[is.na(train$CarValue)]=predict(CVmodel,train[is.na(train$CarValue),])
 train$CarValue=as.ordered(train$CarValue)
 
-train$RiskFactor=as.ordered(train$RiskFactor)
 train$Married=as.factor(train$Married)
 
 # 444 customers don't have information for prevC and years covered by previous issuers at the time of purchase
@@ -41,15 +54,18 @@ summary((b$PrevDuration[b$PrevDuration!=15]))
 # get p=0.176, can generate missing values from geometric distribution
 # assume: there is some reason that they don't want to review PrevDuration,
 # so distribution for people with NAs is different from people with complete PrevDuration
-fitdist(b$PrevDuration[!is.na(b$PrevDuration)],"geom")
+train$PrevDuration[is.na(train$PrevDuration)]=rgeom(dim(a)[1],fitdist(b$PrevDuration[!is.na(b$PrevDuration)],"geom")$estimate)
+train$PrevDuration[train$PrevDuration>15]=15
+
 # assumption: randomly generate missing values with multinomial distribution,
 # proportional to the distribution of people who didn't reveal their PrevC at first
-train$PrevC[is.na(train$PrevC)]=0
+# train$PrevC[is.na(train$PrevC)]=0
 train$PrevC=as.ordered(train$PrevC)
 d=b[!is.na(b$PrevDuration),]
-prevCmodel=multinom(PrevC~GroupSize+Homeowner+CarAge+CarValue+AgeOldest+Married,data=d)
+prevCmodel=multinom(PrevC~State+GroupSize+Homeowner+CarAge+AgeOldest+Married,data=d)
 # predict with model 
 # predict(prevCmodel,d)
+train$PrevC[is.na(train$PrevC)]=predict(prevCmodel,train[is.na(train$PrevC),])
 
 
 # ordered options
@@ -62,7 +78,8 @@ train$F=as.ordered(train$F)
 train$G=as.ordered(train$G)
 
 purchase=train[train$RecordType==1,]
-row.names(purchase)
 lastview=train[as.numeric(row.names(purchase))-1,]
 secondlastview=train[as.numeric(row.names(purchase))-2,]
 firstview=train[train$ShoppingPt==1,]
+
+rm(list=c("a","b","d"))
