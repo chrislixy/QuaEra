@@ -8,7 +8,7 @@ table(purchase$E, purchase$State)
 table(purchase$F, purchase$State)
 # In ND and SD, G=2 was the only option
 # In FL, people can choose between G=3 and G=4, G=3 is more likely
-# No one bought G=0 in OH
+# No one bought G=1 in OH
 table(purchase$G, purchase$State)
 
 mosaicplot(table(purchase$A,purchase$B))
@@ -21,19 +21,19 @@ mosaicplot(table(purchase$A,purchase$G))
 mosaicplot(table(purchase$B,purchase$C))
 mosaicplot(table(purchase$B,purchase$D))
 # BE pair B0E0,B1E1
-mosaicplot(table(purchase$B,purchase$E))
+mosaicplot(table(purchase$B,purchase$E),main="Mosaic plot of option B and E", xlab="B", ylab="E")
 mosaicplot(table(purchase$B,purchase$F))
 mosaicplot(table(purchase$B,purchase$G))
 
 #higher C--higher D
-mosaicplot(table(purchase$C,purchase$D))
-# higher C--higher chance D=1
-mosaicplot(table(purchase$C,purchase$E))
+mosaicplot(table(purchase$C,purchase$D),main="Mosaic plot of option C and D", xlab="C", ylab="D")
+# higher C--higher chance E=1
+mosaicplot(table(purchase$C,purchase$E),main="Mosaic plot of option C and E", xlab="C", ylab="E")
 mosaicplot(table(purchase$C,purchase$F))
 mosaicplot(table(purchase$C,purchase$G))
 
 # higher D -- higher chance E=1
-mosaicplot(table(purchase$D,purchase$E))
+mosaicplot(table(purchase$D,purchase$E),main="Mosaic plot of option D and E", xlab="D", ylab="E")
 mosaicplot(table(purchase$D,purchase$F))
 mosaicplot(table(purchase$D,purchase$G))
 
@@ -46,8 +46,8 @@ mosaicplot(table(purchase$F,purchase$G))
 # Compare first view, 2nd last view, and last view with purchase
 table(firstview$A,purchase$A)
 table(lastview$A,purchase$A)
-mosaicplot(table(firstview$A,purchase$A))
-mosaicplot(table(lastview$A,purchase$A))
+mosaicplot(table(firstview$A,purchase$A),"Mosaic Plot of option A", xlab="First View", ylab="Purchase")
+mosaicplot(table(lastview$A,purchase$A),"Mosaic Plot of option A", xlab="Last View", ylab="Purchase")
 mosaicplot(table(secondlastview$A,purchase$A))
 
 mosaicplot(table(firstview$B,purchase$B))
@@ -67,9 +67,9 @@ mosaicplot(table(lastview$E,purchase$E))
 mosaicplot(table(secondlastview$E,purchase$E))
 
 mosaicplot(table(firstview$F,purchase$F))
-mosaicplot(table(lastview$F,purchase$F))
+mosaicplot(table(lastview$F,purchase$F),"Mosaic Plot of option F", xlab="Last View", ylab="Purchase")
 mosaicplot(table(secondlastview$F,purchase$F))
 
 mosaicplot(table(firstview$G,purchase$G))
-mosaicplot(table(lastview$G,purchase$G))
+mosaicplot(table(lastview$G,purchase$G),"Mosaic Plot of option G", xlab="Last View", ylab="Purchase")
 mosaicplot(table(secondlastview$G,purchase$G))
