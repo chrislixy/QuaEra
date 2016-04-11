@@ -12,6 +12,8 @@ train$family=as.factor(ifelse(train$Married==1 & train$agediff>15 & train$GroupS
 train$couple=as.factor(ifelse(train$Married==1 & train$agediff<=15 & train$GroupSize==2, "Yes","No"))
 train$individual=as.factor(ifelse(train$GroupSize==1, "Yes","No"))
 
+hist(purchase$ShoppingPt,breaks=11,main="Histogram of Number of Coverage Combinations Viewed \n at the Time of Puchase",xlab="Shopping Points")
+
 purchase=train[train$RecordType==1,]
 lastview=train[as.numeric(row.names(purchase))-1,]
 secondlastview=train[as.numeric(row.names(purchase))-2,]
