@@ -35,3 +35,4 @@ sum(purchaseTest$A==lastviewTest$A & purchaseTest$B==lastviewTest$B &
 sum(purchaseTest$A==lastviewTest$A & purchaseTest$B==lastviewTest$B & 
       purchaseTest$C==lastviewTest$C & purchaseTest$D==lastviewTest$D & 
       purchaseTest$E==lastviewTest$E & purchaseTest$G==lastviewTest$G )/dim(purchaseTest)[1]
+

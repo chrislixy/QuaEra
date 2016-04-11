@@ -1,4 +1,5 @@
-
+library(randomForest)
+library(tree)
 
 Gmodel=multinom(purchaseTrain$G~State+CarAge+RiskFactor+
                 A+B+C+D+E+F+G+Cost+agediff+individual,data=lastviewTrain)
@@ -24,8 +25,7 @@ sum(purchaseTest$A==lastviewTest$A & purchaseTest$B==lastviewTest$B &
 sum(purchaseTest$Gpred != lastviewTest$G)
 sum(purchaseTest$G != lastviewTest$G)
 
-library(randomForest)
-library(tree)
+
 
 GtuneRF=tuneRF(purchaseTrain[,c(2,4:6,8:17,25:45)],purchaseTrain$G)
 GtuneRF[order(GtuneRF[,2])[1],1]

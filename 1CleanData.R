@@ -1,6 +1,7 @@
 library(stringr)
 library(nnet)
 library(glmnet)
+library(fitdistrplus)
 # read data
 train <- read.csv("~/Documents/untitled folder/QuaEra/QuaEra/training_autoinsurance.csv")
 
