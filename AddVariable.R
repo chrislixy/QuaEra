@@ -11,3 +11,9 @@ train$agediff[train$AgeOldest != train$AgeYoungest & train$GroupSize==1]=0
 train$family=as.factor(ifelse(train$Married==1 & train$agediff>15 & train$GroupSize>=2, "Yes","No"))
 train$couple=as.factor(ifelse(train$Married==1 & train$agediff<=15 & train$GroupSize==2, "Yes","No"))
 train$individual=as.factor(ifelse(train$GroupSize==1, "Yes","No"))
+
+purchase=train[train$RecordType==1,]
+lastview=train[as.numeric(row.names(purchase))-1,]
+secondlastview=train[as.numeric(row.names(purchase))-2,]
+firstview=train[train$ShoppingPt==1,]
+
