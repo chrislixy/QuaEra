@@ -17,3 +17,8 @@ lastview=train[as.numeric(row.names(purchase))-1,]
 secondlastview=train[as.numeric(row.names(purchase))-2,]
 firstview=train[train$ShoppingPt==1,]
 
+# too slow
+#a=sapply(1:dim(purchase)[1], function(x) {which(train$CustomerID %in% purchase$CustomerID[x] &
+#                                    train$ShoppingPt==which.min(train$Cost[train$CustomerID %in% purchase$CustomerID[x] &
+#                                                               train$RecordType==0]))})
+#lowestcost=train[a,]
