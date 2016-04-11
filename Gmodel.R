@@ -1,3 +1,5 @@
+
+
 Gmodel=multinom(purchaseTrain$G~State+CarAge+RiskFactor+
                 A+B+C+D+E+F+G+Cost+agediff+individual,data=lastviewTrain)
 purchaseTest$Gpred=predict(Gmodel,lastviewTest)
@@ -18,3 +20,22 @@ sum(purchaseTest$A==lastviewTest$A & purchaseTest$B==lastviewTest$B &
       purchaseTest$C==lastviewTest$C & purchaseTest$D==lastviewTest$D & 
       purchaseTest$E==lastviewTest$E & purchaseTest$F==lastviewTest$F & 
       purchaseTest$G==purchaseTest$Gpred)/dim(purchaseTest)[1]
+
+sum(purchaseTest$Gpred != lastviewTest$G)
+sum(purchaseTest$G != lastviewTest$G)
+
+library(randomForest)
+library(tree)
+
+GtuneRF=tuneRF(purchaseTrain[,c(2,4:6,8:17,25:45)],purchaseTrain$G)
+GtuneRF[order(GtuneRF[,2])[1],1]
+GRF=randomForest(purchaseTrain[,c(2,4:6,8:17,25:45)],purchaseTrain$G,mtry=GtuneRF[order(GtuneRF[,2])[1],1])
+GRF$importance[order(-GRF$importance)[1:10],]
+purchaseTest$GpredRF=predict(GRF,purchaseTest[,c(2,4:6,8:17,25:45)])
+purchaseTest$GpredRF=as.ordered(purchaseTest$GpredRF)
+sum(purchaseTest$GpredRF != lastviewTest$G)
+
+sum(purchaseTest$A==lastviewTest$A & purchaseTest$B==lastviewTest$B & 
+      purchaseTest$C==lastviewTest$C & purchaseTest$D==lastviewTest$D & 
+      purchaseTest$E==lastviewTest$E & purchaseTest$F==lastviewTest$F & 
+      purchaseTest$G==purchaseTest$GpredRF)/dim(purchaseTest)[1]
